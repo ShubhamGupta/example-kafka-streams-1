@@ -22,12 +22,12 @@ public class StreamDemo1 {
 
         StreamsBuilder builder = new StreamsBuilder();
         KStream<String, String> simpleFirstStream = builder.stream(sourceTopic, Consumed.with(stringSerde, stringSerde));
-        KStream<String, String> upperCasedStream = simpleFirstStream.mapValues(String::trim);
+        KStream<String, String> upperCasedStream = simpleFirstStream.mapValues( rec -> rec.toLowerCase());
         upperCasedStream.to(sinkTopic, Produced.with(stringSerde, stringSerde));
 
         KafkaStreams kafkaStreams = new KafkaStreams(builder.build(), props);
         kafkaStreams.start();
-        Thread.sleep(35000);
+        Thread.sleep(60000);
         kafkaStreams.close();
     }
 }
